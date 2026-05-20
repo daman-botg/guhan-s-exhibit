@@ -1,0 +1,112 @@
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,700&family=DM+Mono:wght@300;400;500&display=swap');
+
+:root {
+  --bg: #0c0c0c;
+  --fg: #f0ece4;
+  --dim: #8a857a;
+  --lime: #c8f542;
+  --display: 'Fraunces', serif;
+  --mono: 'DM Mono', ui-monospace, monospace;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { background: var(--bg); color: var(--fg); font-family: var(--display); -webkit-font-smoothing: antialiased; }
+body { cursor: none; overflow-x: hidden; }
+@media (hover: none) { body { cursor: auto; } .gv-cursor { display: none; } }
+
+a { color: inherit; text-decoration: none; }
+
+.gv-cursor-dot, .gv-cursor-ring {
+  position: fixed; top: 0; left: 0; pointer-events: none; z-index: 9999;
+  transform: translate(-50%, -50%); will-change: transform;
+}
+.gv-cursor-dot { width: 6px; height: 6px; background: var(--lime); border-radius: 50%; }
+.gv-cursor-ring { width: 30px; height: 30px; border: 1px solid var(--fg); border-radius: 50%; transition: width .25s, height .25s, background .25s, border-color .25s; }
+.gv-cursor-ring.hover { width: 14px; height: 14px; background: var(--lime); border-color: var(--lime); }
+
+.gv-label {
+  position: fixed; z-index: 100; font-family: var(--mono); font-size: 12px;
+  letter-spacing: .12em; text-transform: uppercase; color: var(--fg); mix-blend-mode: difference;
+}
+.gv-label.tl { top: 28px; left: 28px; }
+.gv-label.tr { top: 28px; right: 28px; }
+
+.chapter { position: relative; width: 100%; min-height: 100vh; padding: 8vh 6vw; overflow: hidden; }
+.scene-canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+
+/* CH01 hero */
+.ch1 { display: flex; flex-direction: column; justify-content: center; align-items: flex-start; min-height: 100vh; }
+.ch1 h1 { font-family: var(--display); font-weight: 300; font-size: 15vw; line-height: .88; letter-spacing: -0.04em; position: relative; z-index: 2; }
+.ch1 h1 span { display: inline-block; opacity: 0; transform: translateY(0.3em); }
+.ch1 .sub { font-family: var(--mono); font-size: 13px; letter-spacing: .15em; text-transform: uppercase; margin-top: 3vh; opacity: 0; color: var(--dim); position: relative; z-index: 2; }
+
+/* CH02 about */
+.ch2 { display: flex; flex-direction: column; justify-content: center; gap: 1.4vh; }
+.ch2 .line { font-family: var(--display); font-weight: 300; font-size: 6.2vw; line-height: 1.05; letter-spacing: -0.02em; opacity: 0; transform: translateY(40px); }
+.ch2 .meta { font-family: var(--mono); font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: var(--dim); margin-top: 6vh; opacity: 0; }
+.ch2 .meta + .meta { margin-top: .6vh; }
+
+/* CH03 face */
+.ch3 { display: grid; grid-template-columns: 1fr 1fr; align-items: center; gap: 4vw; }
+.ch3 .scene-canvas { z-index: 0; }
+.ch3 .copy { position: relative; z-index: 2; display: flex; flex-direction: column; gap: 6vh; }
+.ch3 .copy p { font-family: var(--display); font-weight: 300; font-size: 2.4vw; line-height: 1.15; opacity: .15; transition: opacity .6s; }
+.ch3 .copy p.active { opacity: 1; }
+.ch3 .copy p .lime { color: var(--lime); font-style: italic; }
+
+/* CH04 graph */
+.ch4 .ch4-title { position: relative; z-index: 2; font-family: var(--mono); font-size: 12px; letter-spacing: .15em; text-transform: uppercase; color: var(--dim); }
+.ch4 .ch4-final { position: absolute; bottom: 8vh; left: 6vw; right: 6vw; z-index: 2; font-family: var(--display); font-weight: 300; font-size: 2.2vw; line-height: 1.2; max-width: 60ch; opacity: 0; }
+
+/* CH05 research */
+.ch5 { display: flex; flex-direction: column; }
+.ch5 .ch5-headline { font-family: var(--display); font-weight: 300; font-size: 5.6vw; letter-spacing: -0.02em; text-align: center; margin-bottom: 6vh; }
+.ch5 .split { display: grid; grid-template-columns: 1fr 1fr; gap: 4vw; align-items: center; min-height: 70vh; }
+.ch5 svg.mouse { width: 100%; height: auto; max-height: 70vh; }
+.ch5 .lab-info h3 { font-family: var(--display); font-weight: 400; font-size: 3.4vw; letter-spacing: -0.01em; margin-bottom: 2vh; }
+.ch5 .lab-info p { font-family: var(--mono); font-size: 14px; line-height: 1.7; color: var(--dim); max-width: 40ch; }
+.ch5 .lab-info { position: relative; min-height: 30vh; }
+.ch5 .lab-slide { position: absolute; inset: 0; opacity: 0; transform: translateY(40px); }
+.ch5 .anatomy path { fill: none; stroke: var(--dim); stroke-width: 1.2; transition: stroke .8s, opacity .8s, filter .8s; }
+.ch5 .anatomy .region { stroke: #2a2a2a; stroke-width: 1.5; opacity: .4; }
+.ch5 .anatomy .region.active { stroke: #f0b94a; filter: url(#glow); opacity: 1; }
+.ch5 .anatomy .region.dim { stroke: #2a2a2a; opacity: .15; }
+.ch5 .anatomy .arc { stroke-dasharray: 300; stroke-dashoffset: 300; }
+.ch5 .anatomy .arc.active { stroke: #f0b94a; stroke-dashoffset: 0; transition: stroke-dashoffset 1.6s ease-out, stroke .8s; filter: url(#glow); }
+.ch5 .anatomy .label { fill: var(--fg); font-family: var(--mono); font-size: 11px; letter-spacing: .1em; opacity: 0; transition: opacity .6s; }
+.ch5 .anatomy .label.active { opacity: 1; }
+
+/* CH06 brain */
+.ch6 { min-height: 220vh; }
+.ch6 .ch6-pin { position: sticky; top: 0; height: 100vh; display: grid; grid-template-columns: 1fr 1fr; align-items: center; }
+.ch6 .ch6-scene { position: absolute; inset: 0; }
+.ch6 .ch6-copy { position: relative; z-index: 2; grid-column: 2; padding-right: 6vw; display: flex; flex-direction: column; gap: 3vh; }
+.ch6 .ch6-copy p { font-family: var(--mono); font-size: 14px; line-height: 1.6; color: var(--dim); opacity: .15; transition: opacity .5s, color .5s; }
+.ch6 .ch6-copy p.active { opacity: 1; color: var(--fg); }
+.ch6 .ch6-final { position: absolute; bottom: 8vh; left: 6vw; right: 6vw; z-index: 2; font-family: var(--display); font-weight: 300; font-size: 3vw; line-height: 1.2; text-align: center; opacity: 0; }
+.ch6 .ch6-final .lime { color: var(--lime); font-style: italic; }
+
+/* CH07 contact */
+.ch7 { display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; gap: 6vh; }
+.ch7 h2 { font-family: var(--display); font-weight: 300; font-size: 7vw; letter-spacing: -0.02em; }
+.ch7 .email { font-family: var(--display); font-weight: 300; font-size: 3.4vw; position: relative; display: inline-block; }
+.ch7 .email::after { content: ''; position: absolute; left: 0; bottom: 0.05em; width: 100%; height: 2px; background: var(--lime); transform: scaleX(0); transform-origin: left; transition: transform .3s ease; }
+.ch7 .email:hover::after { transform: scaleX(1); }
+.ch7 .socials { font-family: var(--mono); font-size: 12px; letter-spacing: .15em; text-transform: uppercase; color: var(--dim); }
+.ch7 .socials a:hover { color: var(--fg); }
+
+@media (max-width: 820px) {
+  .ch1 h1 { font-size: 22vw; }
+  .ch2 .line { font-size: 9vw; }
+  .ch3 { grid-template-columns: 1fr; }
+  .ch3 .copy p { font-size: 5vw; }
+  .ch4 .ch4-final { font-size: 4.5vw; }
+  .ch5 .split { grid-template-columns: 1fr; }
+  .ch5 .lab-info h3 { font-size: 7vw; }
+  .ch5 .ch5-headline { font-size: 8vw; }
+  .ch6 .ch6-pin { grid-template-columns: 1fr; }
+  .ch6 .ch6-copy { grid-column: 1; padding: 0 6vw; }
+  .ch6 .ch6-final { font-size: 5vw; }
+  .ch7 h2 { font-size: 12vw; }
+  .ch7 .email { font-size: 6vw; }
+}
