@@ -8,6 +8,7 @@ import { HeroFluid } from "../portfolio/scenes/HeroFluid";
 import { FaceMesh, type FaceAU } from "../portfolio/scenes/FaceMesh";
 import { ForceGraph } from "../portfolio/scenes/ForceGraph";
 import { BrainScene } from "../portfolio/scenes/BrainScene";
+import mouseImg from "../assets/mouse-silhouette.png";
 
 export const Route = createFileRoute("/")({
   head: () => ({
