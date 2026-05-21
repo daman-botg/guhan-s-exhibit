@@ -90,7 +90,7 @@ export function ForceGraph({ progressRef }: { progressRef: React.MutableRefObjec
     const edgeGeo = new THREE.BufferGeometry();
     edgeGeo.setAttribute("position", new THREE.BufferAttribute(edgePos, 3));
     edgeGeo.setAttribute("color", new THREE.BufferAttribute(edgeCol, 3));
-    const edgeMat = new THREE.LineBasicMaterial({ vertexColors: true, transparent: true, opacity: 0.4 });
+    const edgeMat = new THREE.LineBasicMaterial({ vertexColors: true, transparent: true, opacity: 0.55, blending: THREE.AdditiveBlending });
     const edgeLines = new THREE.LineSegments(edgeGeo, edgeMat);
     scene.add(edgeLines);
 
