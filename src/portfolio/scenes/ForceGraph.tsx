@@ -157,16 +157,25 @@ export function ForceGraph({ progressRef }: { progressRef: React.MutableRefObjec
       for (let i = 0; i < nodes.length; i++) {
         const n = nodes[i];
         nodePos[i*3] = n.x; nodePos[i*3+1] = n.y; nodePos[i*3+2] = 0;
-        const intensity = n.result ? 1 : (n.sig > 0.85 ? (0.4 + prog*0.6) : (0.3 - prog*0.2));
-        const c = n.result ? new THREE.Color(0xc8f542).multiplyScalar(0.5 + 0.5*Math.sin(t*3))
-                            : new THREE.Color(intensity, intensity*0.97, intensity*0.9);
+        // base luminosity bumps with sig + progress so the graph is colorful from frame one
+        const lum = n.result ? 0.6 : (0.42 + n.sig * 0.18 + prog * 0.18);
+        const sat = n.result ? 0.85 : 0.85;
+        let c: THREE.Color;
+        if (n.result) {
+          const pulse = 0.5 + 0.5*Math.sin(t*3);
+          c = new THREE.Color(0xc8f542).multiplyScalar(0.7 + 0.3*pulse);
+        } else {
+          c = new THREE.Color().setHSL(n.hue/360, sat, lum);
+        }
         nodeCol[i*3] = c.r; nodeCol[i*3+1] = c.g; nodeCol[i*3+2] = c.b;
-        nodeSize[i] = n.result ? 22 : (8 + n.sig * 8 * (0.5 + prog*0.5));
+        nodeSize[i] = n.result ? 26 : (10 + n.sig * 10 * (0.6 + prog*0.6));
         labelEls[i].style.left = `${n.x + W()/2}px`;
         labelEls[i].style.top = `${-n.y + H()/2}px`;
-        labelEls[i].style.opacity = String(n.result ? (prog > 0.85 ? 1 : 0) : (0.4 + intensity*0.6));
+        const labelOp = n.result ? (prog > 0.85 ? 1 : 0) : (n.sig > 0.85 ? (0.7 + prog*0.3) : (0.5 + n.sig*0.3));
+        labelEls[i].style.opacity = String(labelOp);
         if (n.result) labelEls[i].style.color = "#c8f542";
-        else if (n.sig > 0.85) labelEls[i].style.color = `rgba(240,236,228,${0.5 + prog*0.5})`;
+        else if (n.sig > 0.85) labelEls[i].style.color = `rgba(240,236,228,${0.7 + prog*0.3})`;
+        else labelEls[i].style.color = `hsla(${n.hue}, 35%, 70%, ${0.55 + n.sig*0.3})`;
       }
       (nodeGeo.getAttribute("position") as THREE.BufferAttribute).needsUpdate = true;
       (nodeGeo.getAttribute("color") as THREE.BufferAttribute).needsUpdate = true;
@@ -175,10 +184,10 @@ export function ForceGraph({ progressRef }: { progressRef: React.MutableRefObjec
         const [a, b] = edges[i];
         edgePos[i*6] = nodes[a].x; edgePos[i*6+1] = nodes[a].y; edgePos[i*6+2] = 0;
         edgePos[i*6+3] = nodes[b].x; edgePos[i*6+4] = nodes[b].y; edgePos[i*6+5] = 0;
-        const k = (nodes[a].sig + nodes[b].sig) / 2;
-        const v = 0.2 + k * 0.4 * prog;
-        edgeCol[i*6] = v; edgeCol[i*6+1] = v; edgeCol[i*6+2] = v*0.9;
-        edgeCol[i*6+3] = v; edgeCol[i*6+4] = v; edgeCol[i*6+5] = v*0.9;
+        const ca = new THREE.Color().setHSL(nodes[a].hue/360, 0.6, 0.35);
+        const cb = new THREE.Color().setHSL(nodes[b].hue/360, 0.6, 0.35);
+        edgeCol[i*6] = ca.r; edgeCol[i*6+1] = ca.g; edgeCol[i*6+2] = ca.b;
+        edgeCol[i*6+3] = cb.r; edgeCol[i*6+4] = cb.g; edgeCol[i*6+5] = cb.b;
       }
       (edgeGeo.getAttribute("position") as THREE.BufferAttribute).needsUpdate = true;
       (edgeGeo.getAttribute("color") as THREE.BufferAttribute).needsUpdate = true;
