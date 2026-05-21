@@ -8,6 +8,7 @@ import { HeroFluid } from "../portfolio/scenes/HeroFluid";
 import { FaceMesh, type FaceAU } from "../portfolio/scenes/FaceMesh";
 import { ForceGraph } from "../portfolio/scenes/ForceGraph";
 import { BrainScene } from "../portfolio/scenes/BrainScene";
+import mouseImg from "../assets/mouse-silhouette.png";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -89,26 +90,28 @@ function Portfolio() {
     // Ch5 research — sequential lab reveals
     const ch5tl = gsap.timeline({ scrollTrigger: { trigger: ".ch5", start: "top 70%" } });
     ch5tl.from(".ch5 .ch5-headline", { opacity: 0, y: 40, duration: 1, ease: "power3.out" });
+    const eischRegions = ".ch5 .r-frontal, .ch5 .r-temporal, .ch5 .r-hippo";
+    const mukRegions = ".ch5 .r-parietal, .ch5 .r-occipital, .ch5 .r-cerebellum";
     ScrollTrigger.create({
-      trigger: ".ch5 .split", start: "top center",
+      trigger: ".ch5 .split", start: "top 70%",
       onEnter: () => {
-        document.querySelectorAll(".ch5 .anatomy .hippo, .ch5 .anatomy .hippo-label").forEach((e) => e.classList.add("active"));
+        document.querySelectorAll(eischRegions).forEach((e) => e.classList.add("active"));
         gsap.to(".ch5 .lab-eisch", { opacity: 1, y: 0, duration: 1, ease: "power3.out" });
       },
     });
     ScrollTrigger.create({
       trigger: ".ch5 .split", start: "center center", end: "bottom center",
       onEnter: () => {
-        document.querySelectorAll(".ch5 .anatomy .hippo").forEach((e) => { e.classList.remove("active"); e.classList.add("dim"); });
-        document.querySelectorAll(".ch5 .anatomy .hippo-label").forEach((e) => e.classList.remove("active"));
-        document.querySelectorAll(".ch5 .anatomy .pfc, .ch5 .anatomy .arc, .ch5 .anatomy .pfc-label").forEach((e) => e.classList.add("active"));
+        document.querySelectorAll(eischRegions).forEach((e) => { e.classList.remove("active"); e.classList.add("dim"); });
+        document.querySelectorAll(mukRegions).forEach((e) => e.classList.add("active"));
+        document.querySelectorAll(".ch5 .arc-path").forEach((e) => e.classList.add("active"));
         gsap.to(".ch5 .lab-eisch", { opacity: 0, y: -40, duration: 0.6, ease: "power2.in" });
         gsap.to(".ch5 .lab-mukherjee", { opacity: 1, y: 0, duration: 0.8, delay: 0.1, ease: "power3.out" });
       },
       onLeaveBack: () => {
-        document.querySelectorAll(".ch5 .anatomy .hippo").forEach((e) => { e.classList.add("active"); e.classList.remove("dim"); });
-        document.querySelectorAll(".ch5 .anatomy .hippo-label").forEach((e) => e.classList.add("active"));
-        document.querySelectorAll(".ch5 .anatomy .pfc, .ch5 .anatomy .arc, .ch5 .anatomy .pfc-label").forEach((e) => e.classList.remove("active"));
+        document.querySelectorAll(eischRegions).forEach((e) => { e.classList.add("active"); e.classList.remove("dim"); });
+        document.querySelectorAll(mukRegions).forEach((e) => e.classList.remove("active"));
+        document.querySelectorAll(".ch5 .arc-path").forEach((e) => e.classList.remove("active"));
         gsap.to(".ch5 .lab-eisch", { opacity: 1, y: 0, duration: 0.6 });
         gsap.to(".ch5 .lab-mukherjee", { opacity: 0, y: 40, duration: 0.4 });
       },
@@ -187,43 +190,40 @@ function Portfolio() {
       <section className="chapter ch5">
         <div className="ch5-headline">Three labs. Two universities. One semester.</div>
         <div className="split">
-          <svg className="anatomy mouse" viewBox="0 0 600 400" xmlns="http://www.w3.org/2000/svg">
-            <defs>
-              <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
-                <feGaussianBlur stdDeviation="3.5" result="b" />
-                <feMerge><feMergeNode in="b" /><feMergeNode in="SourceGraphic" /></feMerge>
-              </filter>
-            </defs>
-            {/* Mouse body outline — anatomical, side profile */}
-            <path d="M 80 240 Q 70 215 90 200 Q 110 188 145 188 Q 170 188 195 178 Q 215 168 240 168 Q 290 162 340 168 Q 395 175 440 192 Q 470 204 495 220 Q 520 234 535 250 Q 548 262 552 274 Q 555 285 548 290 Q 540 294 525 290 Q 510 285 500 282 L 498 296 Q 510 308 515 322 Q 518 332 510 336 Q 502 339 492 330 Q 482 320 476 310 L 470 310 Q 462 322 450 330 Q 440 336 430 333 Q 423 330 425 322 Q 428 312 436 304 Q 430 302 420 302 L 280 302 Q 260 308 250 320 Q 240 332 228 332 Q 218 332 218 322 Q 220 314 230 306 L 200 304 Q 188 310 178 320 Q 168 330 156 330 Q 146 328 148 318 Q 152 308 162 300 L 150 296 Q 130 290 110 282 Q 90 274 82 260 Q 78 250 80 240 Z" />
-            {/* Ear */}
-            <path d="M 100 200 Q 92 178 108 170 Q 124 166 130 184 Q 132 196 122 202 Z" />
-            {/* Eye */}
-            <circle cx="118" cy="216" r="3" fill="#f0ece4" stroke="none" />
-            {/* Whiskers */}
-            <path d="M 78 250 L 50 248 M 78 256 L 52 260 M 78 244 L 52 240" strokeWidth="0.6" />
-            {/* Tail */}
-            <path d="M 552 280 Q 580 290 595 270 Q 605 252 590 240" strokeWidth="1" />
-
-            {/* Brain regions inside the head — hippocampus & PFC */}
-            <path className="region hippo" d="M 145 218 Q 152 208 168 210 Q 182 213 188 224 Q 184 234 168 234 Q 152 232 145 224 Z" />
-            <path className="region pfc" d="M 96 220 Q 100 210 114 210 Q 126 212 130 222 Q 126 232 114 234 Q 100 232 96 224 Z" />
-            <path className="region arc" d="M 114 222 Q 140 200 168 222" fill="none" />
-
-            {/* Anatomical leader lines + labels */}
-            <line className="region hippo" x1="168" y1="222" x2="290" y2="120" />
-            <text className="label hippo-label" x="295" y="118">Dentate Gyrus · CA1</text>
-            <line className="region pfc" x1="114" y1="222" x2="290" y2="80" />
-            <text className="label pfc-label" x="295" y="78">Prelimbic Cortex → dHPC Circuit</text>
-          </svg>
+          <div className="mouse-stage">
+            <img className="mouse-img" src={mouseImg} alt="Anatomical reference: laboratory mouse, side profile" loading="lazy" />
+            <div className="brain-overlay">
+              <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                  <radialGradient id="g-frontal" cx="50%" cy="50%"><stop offset="0%" stopColor="#ff3b6e" stopOpacity="1"/><stop offset="100%" stopColor="#ff3b6e" stopOpacity="0"/></radialGradient>
+                  <radialGradient id="g-parietal" cx="50%" cy="50%"><stop offset="0%" stopColor="#ff9a3c" stopOpacity="1"/><stop offset="100%" stopColor="#ff9a3c" stopOpacity="0"/></radialGradient>
+                  <radialGradient id="g-occipital" cx="50%" cy="50%"><stop offset="0%" stopColor="#ffd83c" stopOpacity="1"/><stop offset="100%" stopColor="#ffd83c" stopOpacity="0"/></radialGradient>
+                  <radialGradient id="g-temporal" cx="50%" cy="50%"><stop offset="0%" stopColor="#3cffb0" stopOpacity="1"/><stop offset="100%" stopColor="#3cffb0" stopOpacity="0"/></radialGradient>
+                  <radialGradient id="g-cerebellum" cx="50%" cy="50%"><stop offset="0%" stopColor="#3ccfff" stopOpacity="1"/><stop offset="100%" stopColor="#3ccfff" stopOpacity="0"/></radialGradient>
+                  <radialGradient id="g-hippo" cx="50%" cy="50%"><stop offset="0%" stopColor="#ff5cf0" stopOpacity="1"/><stop offset="100%" stopColor="#ff5cf0" stopOpacity="0"/></radialGradient>
+                </defs>
+                {/* rainbow region blobs — positioned over the mouse's head */}
+                <ellipse className="brain-region r-frontal"   cx="55"  cy="95"  rx="38" ry="32" fill="url(#g-frontal)" />
+                <ellipse className="brain-region r-parietal"  cx="95"  cy="80"  rx="34" ry="28" fill="url(#g-parietal)" />
+                <ellipse className="brain-region r-occipital" cx="130" cy="100" rx="32" ry="28" fill="url(#g-occipital)" />
+                <ellipse className="brain-region r-temporal"  cx="100" cy="120" rx="40" ry="22" fill="url(#g-temporal)" />
+                <ellipse className="brain-region r-cerebellum" cx="150" cy="130" rx="26" ry="22" fill="url(#g-cerebellum)" />
+                <ellipse className="brain-region r-hippo"     cx="85"  cy="105" rx="22" ry="16" fill="url(#g-hippo)" />
+                {/* circuit arc connecting prefrontal → hippocampus, drawn on demand */}
+                <path className="arc-path" d="M 55 95 Q 70 60 95 80 Q 92 100 85 105" />
+              </svg>
+            </div>
+          </div>
           <div className="lab-info">
             <div className="lab-slide lab-eisch">
-              <h3>Eisch Lab — UPenn / CHOP</h3>
+              <span className="tag">01 — Eisch Lab</span>
+              <h3>UPenn / CHOP</h3>
               <p>No-code SLEAP GUI eliminating manual annotation. Real-time behavioral tracking pipeline for hippocampal experiments.</p>
             </div>
             <div className="lab-slide lab-mukherjee">
-              <h3>Mukherjee Lab — UPenn</h3>
-              <p>Facial landmark model for schizophrenia phenotyping in mice. Connecting expression patterns to prefrontal-hippocampal circuit disruptions.</p>
+              <span className="tag">02 — Mukherjee Lab</span>
+              <h3>UPenn</h3>
+              <p>Facial landmark model for schizophrenia phenotyping in mice. Connecting expression patterns to prefrontal–hippocampal circuit disruptions.</p>
             </div>
           </div>
         </div>
