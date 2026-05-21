@@ -90,26 +90,28 @@ function Portfolio() {
     // Ch5 research — sequential lab reveals
     const ch5tl = gsap.timeline({ scrollTrigger: { trigger: ".ch5", start: "top 70%" } });
     ch5tl.from(".ch5 .ch5-headline", { opacity: 0, y: 40, duration: 1, ease: "power3.out" });
+    const eischRegions = ".ch5 .r-frontal, .ch5 .r-temporal, .ch5 .r-hippo";
+    const mukRegions = ".ch5 .r-parietal, .ch5 .r-occipital, .ch5 .r-cerebellum";
     ScrollTrigger.create({
-      trigger: ".ch5 .split", start: "top center",
+      trigger: ".ch5 .split", start: "top 70%",
       onEnter: () => {
-        document.querySelectorAll(".ch5 .anatomy .hippo, .ch5 .anatomy .hippo-label").forEach((e) => e.classList.add("active"));
+        document.querySelectorAll(eischRegions).forEach((e) => e.classList.add("active"));
         gsap.to(".ch5 .lab-eisch", { opacity: 1, y: 0, duration: 1, ease: "power3.out" });
       },
     });
     ScrollTrigger.create({
       trigger: ".ch5 .split", start: "center center", end: "bottom center",
       onEnter: () => {
-        document.querySelectorAll(".ch5 .anatomy .hippo").forEach((e) => { e.classList.remove("active"); e.classList.add("dim"); });
-        document.querySelectorAll(".ch5 .anatomy .hippo-label").forEach((e) => e.classList.remove("active"));
-        document.querySelectorAll(".ch5 .anatomy .pfc, .ch5 .anatomy .arc, .ch5 .anatomy .pfc-label").forEach((e) => e.classList.add("active"));
+        document.querySelectorAll(eischRegions).forEach((e) => { e.classList.remove("active"); e.classList.add("dim"); });
+        document.querySelectorAll(mukRegions).forEach((e) => e.classList.add("active"));
+        document.querySelectorAll(".ch5 .arc-path").forEach((e) => e.classList.add("active"));
         gsap.to(".ch5 .lab-eisch", { opacity: 0, y: -40, duration: 0.6, ease: "power2.in" });
         gsap.to(".ch5 .lab-mukherjee", { opacity: 1, y: 0, duration: 0.8, delay: 0.1, ease: "power3.out" });
       },
       onLeaveBack: () => {
-        document.querySelectorAll(".ch5 .anatomy .hippo").forEach((e) => { e.classList.add("active"); e.classList.remove("dim"); });
-        document.querySelectorAll(".ch5 .anatomy .hippo-label").forEach((e) => e.classList.add("active"));
-        document.querySelectorAll(".ch5 .anatomy .pfc, .ch5 .anatomy .arc, .ch5 .anatomy .pfc-label").forEach((e) => e.classList.remove("active"));
+        document.querySelectorAll(eischRegions).forEach((e) => { e.classList.add("active"); e.classList.remove("dim"); });
+        document.querySelectorAll(mukRegions).forEach((e) => e.classList.remove("active"));
+        document.querySelectorAll(".ch5 .arc-path").forEach((e) => e.classList.remove("active"));
         gsap.to(".ch5 .lab-eisch", { opacity: 1, y: 0, duration: 0.6 });
         gsap.to(".ch5 .lab-mukherjee", { opacity: 0, y: 40, duration: 0.4 });
       },
