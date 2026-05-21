@@ -1,27 +1,28 @@
 import { useEffect, useRef } from "react";
 import * as THREE from "three";
 
+// hue is HSL hue degrees (warm spectrum, with cyan/magenta accents — no blue/violet gradients)
 const NODES = [
-  { label: "Phase II", signal: 1 },
-  { label: "oncology", signal: 0.4 },
-  { label: "biomarker expression", signal: 1 },
-  { label: "trial dropout rate", signal: 0.3 },
-  { label: "p-value", signal: 0.6 },
-  { label: "FDA approval", signal: 0.7 },
-  { label: "patient cohort", signal: 0.5 },
-  { label: "adverse events", signal: 0.35 },
-  { label: "genomic marker", signal: 0.8 },
-  { label: "trial size", signal: 1 },
-  { label: "compound toxicity", signal: 0.3 },
-  { label: "enrollment rate", signal: 0.45 },
-  { label: "primary endpoint", signal: 1 },
-  { label: "randomization", signal: 0.5 },
-  { label: "blinding protocol", signal: 0.4 },
-  { label: "placebo arm", signal: 0.4 },
-  { label: "survival curve", signal: 0.7 },
-  { label: "dose response", signal: 0.6 },
-  { label: "control group", signal: 0.5 },
-  { label: "SUCCESS — 84% confidence", signal: 1.2, result: true },
+  { label: "Phase II",              signal: 1,    hue: 45  }, // amber
+  { label: "oncology",              signal: 0.45, hue: 18  }, // orange
+  { label: "biomarker expression",  signal: 1,    hue: 320 }, // magenta
+  { label: "trial dropout rate",    signal: 0.3,  hue: 30  },
+  { label: "p-value",               signal: 0.65, hue: 50  },
+  { label: "FDA approval",          signal: 0.75, hue: 180 }, // cyan
+  { label: "patient cohort",        signal: 0.55, hue: 25  },
+  { label: "adverse events",        signal: 0.4,  hue: 8   },
+  { label: "genomic marker",        signal: 0.85, hue: 290 }, // magenta-pink
+  { label: "trial size",            signal: 1,    hue: 38  },
+  { label: "compound toxicity",     signal: 0.35, hue: 12  },
+  { label: "enrollment rate",       signal: 0.5,  hue: 55  },
+  { label: "primary endpoint",      signal: 1,    hue: 170 }, // teal
+  { label: "randomization",         signal: 0.55, hue: 35  },
+  { label: "blinding protocol",     signal: 0.4,  hue: 22  },
+  { label: "placebo arm",           signal: 0.45, hue: 60  },
+  { label: "survival curve",        signal: 0.75, hue: 200 }, // cyan-teal
+  { label: "dose response",         signal: 0.65, hue: 42  },
+  { label: "control group",         signal: 0.55, hue: 28  },
+  { label: "SUCCESS — 84% confidence", signal: 1.2, hue: 78, result: true },
 ];
 
 export function ForceGraph({ progressRef }: { progressRef: React.MutableRefObject<number> }) {
