@@ -38,12 +38,12 @@ export function ForceGraph({ progressRef }: { progressRef: React.MutableRefObjec
     renderer.setSize(W(), H());
     el.appendChild(renderer.domElement);
 
-    type N = { x: number; y: number; vx: number; vy: number; sig: number; result?: boolean; label: string };
+    type N = { x: number; y: number; vx: number; vy: number; sig: number; hue: number; result?: boolean; label: string };
     const nodes: N[] = NODES.map((n) => ({
       x: (Math.random()-0.5)*W()*0.7,
       y: (Math.random()-0.5)*H()*0.7,
       vx: 0, vy: 0,
-      sig: n.signal, result: n.result, label: n.label,
+      sig: n.signal, hue: n.hue, result: n.result, label: n.label,
     }));
     // edges: random sparse links
     const edges: [number, number][] = [];
